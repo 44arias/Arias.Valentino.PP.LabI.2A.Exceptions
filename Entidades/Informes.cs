@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Entidades {
@@ -12,6 +13,9 @@ namespace Entidades {
         }
 
         private static void MostrarDocumentosPorEstado(Escaner e, Documento.Paso estado, out int extension, out int cantidad, out string resumen) {
+            if (e == null)
+                throw new ArgumentNullException(nameof(e), "El escáner no puede ser nulo.");
+
             extension = 0;
             cantidad = 0;
             StringBuilder sb = new StringBuilder();
@@ -19,7 +23,7 @@ namespace Entidades {
             foreach (Documento doc in e.ListaDocumentos) {
                 if (doc.Estado == estado) {
                     cantidad++;
-                    sb.AppendLine(doc.ToString());
+                    sb.AppendLine(doc.ToString()); 
                     extension += (doc is Libro libro) ? libro.NumPaginas : (doc is Mapa mapa) ? (int)mapa.Superficie : 0;
                 }
             }
