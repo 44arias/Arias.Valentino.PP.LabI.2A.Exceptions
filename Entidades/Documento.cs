@@ -5,11 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Entidades {
+
+    /// <summary>
+    /// Clase abstracta que representa un documento genérico (libro, mapa, etc.).
+    /// </summary>
     public abstract class Documento {
+
+        // Campos privados para almacenar los datos del documento
         int anio;
         string autor, barcode, numNormalizado, titulo;
         Paso estado;
 
+        /// <summary>
+        /// Enumeración que define los posibles estados de un documento.
+        /// </summary>
         public enum Paso {
             Inicio,
             Distribuido,
@@ -18,30 +27,54 @@ namespace Entidades {
             Terminado
         }
 
+        // Propiedades públicas para acceder a los datos del documento (solo lectura)
+        /// <summary>
+        /// Obtiene el año de publicación del documento.
+        /// </summary>
         public int Anio {
             get => this.anio;
         }
 
+        /// <summary>
+        /// Obtiene el autor del documento.
+        /// </summary>
         public string Autor {
             get => this.autor;
         }
 
+        /// <summary>
+        /// Obtiene el código de barras del documento.
+        /// </summary>
         public string Barcode {
             get => this.barcode;
         }
 
+        /// <summary>
+        /// Obtiene el estado actual del documento.
+        /// </summary>
         public Paso Estado {
             get => this.estado;
         }
 
+        // Propiedad protegida para acceder al número normalizado (solo lectura)
+        /// <summary>
+        /// Obtiene el número normalizado del documento (ISBN para libros).
+        /// </summary>
         protected string NumNormalizado {
             get => this.numNormalizado;
         }
 
+        /// <summary>
+        /// Obtiene el título del documento.
+        /// </summary>
         public string Titulo {
             get => this.titulo;
         }
 
+        /// <summary>
+        /// Avanza el estado del documento al siguiente paso.
+        /// </summary>
+        /// <returns>True si el estado avanzó, False si ya estaba en el estado final.</returns>
         public bool AvanzarEstado() {
             switch (this.estado) {
                 case Paso.Inicio:
@@ -62,6 +95,14 @@ namespace Entidades {
             return true;
         }
 
+        /// <summary>
+        /// Constructor de la clase Documento.
+        /// </summary>
+        /// <param name="titulo">Título del documento.</param>
+        /// <param name="autor">Autor del documento.</param>
+        /// <param name="anio">Año de publicación del documento.</param>
+        /// <param name="numNormalizado">Número normalizado del documento (ISBN para libros).</param>
+        /// <param name="barcode">Código de barras del documento.</param>
         public Documento(string titulo, string autor, int anio, string numNormalizado, string barcode) {
             this.titulo = titulo;
             this.autor = autor;
@@ -70,6 +111,10 @@ namespace Entidades {
             this.barcode = barcode;
         }
 
+        /// <summary>
+        /// Devuelve una representación en cadena del documento.
+        /// </summary>
+        /// <returns>Cadena con los detalles del documento.</returns>
         public override string ToString() {
             StringBuilder text = new StringBuilder();
             text.AppendLine($"Título: {this.titulo}");
