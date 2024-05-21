@@ -130,13 +130,14 @@ namespace Entidades {
         /// </summary>
         /// <param name="e">El escáner.</param>
         /// <param name="d">El documento a agregar.</param>
-        /// <returns>El escáner con el documento agregado (si corresponde).</returns>
-        public static Escaner operator +(Escaner e, Documento d) {
+        /// <returns>True si el documento se agregó correctamente, false en caso contrario.</returns>
+        public static bool operator +(Escaner e, Documento d) {
             if (e != d && d.Estado == Documento.Paso.Inicio && e.Tipo == (d is Libro ? TipoDoc.libro : TipoDoc.mapa)) {
                 d.AvanzarEstado();
                 e.listaDocumentos.Add(d);
+                return true;
             }
-            return e;
+            return false;
         }
     }
 }
