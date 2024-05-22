@@ -126,18 +126,29 @@ namespace Entidades {
         }
 
         /// <summary>
-        /// Agrega un documento al escáner si es del tipo correcto y está en el estado inicial.
+        /// Agrega un documento al escáner si cumple las siguientes condiciones:
+        /// 1. El documento está en estado "Inicio".
+        /// 2. El tipo de documento coincide con el tipo de escáner (libro o mapa).
+        /// 3. No existe un documento igual en el escáner (según los criterios de igualdad de cada tipo de documento).
         /// </summary>
-        /// <param name="e">El escáner.</param>
+        /// <param name="e">El escáner al que se agregará el documento.</param>
         /// <param name="d">El documento a agregar.</param>
-        /// <returns>True si el documento se agregó correctamente, false en caso contrario.</returns>
+        /// <returns>True si el documento se agregó exitosamente, false en caso contrario.</returns>
         public static bool operator +(Escaner e, Documento d) {
-            if (e != d && d.Estado == Documento.Paso.Inicio && e.Tipo == (d is Libro ? TipoDoc.libro : TipoDoc.mapa)) {
-                d.AvanzarEstado();
-                e.listaDocumentos.Add(d);
-                return true;
+            if (d.Estado != Documento.Paso.Inicio || e.Tipo != (d is Libro ? TipoDoc.libro : TipoDoc.mapa)) {
+                return false;
             }
-            return false;
+
+            foreach (Documento doc in e.listaDocumentos) {
+                if ((doc is Libro && d is Libro && (Libro)doc == (Libro)d) ||
+                    (doc is Mapa && d is Mapa && (Mapa)doc == (Mapa)d)) {
+                    return false;
+                }
+            }
+
+            d.AvanzarEstado();
+            e.ListaDocumentos.Add(d);
+            return true;
         }
     }
 }
